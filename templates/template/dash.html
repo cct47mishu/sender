@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.0.0/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body class="bg-blue-100">
+  <div class="container mx-auto p-4">
+    
+<a href="/" class="px-2 text-white bg-green-600 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-green-600 focus:outline-none dark:focus:ring-blue-800">Home</a>
+
+    <h1 class="mb-4 text-3xl font-extrabold text-green-900 dark:text-white md:text-5xl lg:text-3xl text-center underline">Sending Details !</h1>  <span class="text-2xl text-center self-center text-green-600" id="detailstxt"> Total send: <span></span> </span>
+
+    <table class="min-w-full bg-white border border-gray-200 rounded-lg">
+      <thead>
+        <tr>
+          <th class="px-4 py-2 border-b-2">Server</th>
+          <th class="px-4 py-2 border-b-2">Email</th>
+          <th class="px-4 py-2 border-b-2">Status</th>
+          <th class="px-4 py-2 border-b-2">Timestamp</th>
+          <th class="px-4 py-2 border-b-2">Count</th>
+          <th class="px-4 py-2 border-b-2">Sending method</th>
+          <th class="px-4 py-2 border-b-2">action</th>
+        </tr>
+      </thead>
+      <tbody id="data-table">
+        <!-- Rows will be dynamically added here -->
+      </tbody>
+    </table>
+  </div>
+
+  <script>
+   $(document).ready(function() {
+    // Send an AJAX request to fetch the data
+    $.ajax({
+        url: "/apidata",  // Make sure this matches your Flask route
+        type: "GET",
+        success: function(data) {
+            // Populate the table with the received data
+            var tableBody = $('#data-table');
+            tableBody.empty(); // Clear existing data if any
+           
+            $.each(data, function(index, ipDataWrapper) {
+                // Since each element in the data is a single IP object
+                
+                $.each(ipDataWrapper, function(ip, innerDataWrapper) {
+                    var emailCount = Object.keys(innerDataWrapper[ip]).length; // Number of emails under this IP
+
+                    var ipDisplayed = false; // Track if IP has been displayed
+                    var xy=0
+                    // Iterate over the inner data
+                    $.each(innerDataWrapper, function(ipAgain, emails) {
+                        // Loop through the emails
+                        $.each(emails, function(email, details) {
+                          console.log(details)
+                          try{
+                          if (details.includes("contacts.csv")||details.includes("gmails.csv")||details.includes("subjects.csv")||details.includes("not sedding")){
+                            var row = '<tr class="bg-gray-50 hover:bg-gray-100 transition-colors">';
+
+                            // If the IP hasn't been displayed yet, create a rowspan for it
+                            if (!ipDisplayed) {
+                                // Make the IP clickable by wrapping it in <a href>
+                                row += '<td class="px-4 py-2 border" rowspan="' + emailCount + '">' +
+                                        ip + 
+                                      '</td>';
+                                ipDisplayed = true; // Mark IP as displayed for the rest of the rows
+                            }
+                            row += '<td class="px-4 py-2 border">' + details + '</td>';
+                            row += '<td class="px-4 py-2 border">' + details + '</td>';
+                            row += '<td class="px-4 py-2 border">' + details + '</td>';
+                            row += '<td class="px-4 py-2 border">' + details + '</td>';
+                            row += '<td class="px-4 py-2 border">' + details.type + '</td>';
+                            row += '<td class="px-4 py-2 border"> <button id="del" class="focus:outline-none text-white bg-yellow-400 hover:bg-yellow-500 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:focus:ring-yellow-900" value="submit">stop</button> <button id="on" class="focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800" value="submit">stat</button><input type="hidden" value='+ip+'></td>';
+                            row += '</tr>';
+                            tableBody.append(row);
+                            
+                            return;
+                          }}catch(e){console.log(e)}
+                            var row = '<tr class="bg-gray-50 hover:bg-gray-100 transition-colors">';
+
+                            // If the IP hasn't been displayed yet, create a rowspan for it
+                            if (!ipDisplayed) {
+                                // Make the IP clickable by wrapping it in <a href>
+                                row += '<td class="px-4 py-2 border" rowspan="' + emailCount + '">' +
+                                        ip + 
+                                       '</td>';
+                                ipDisplayed = true; // Mark IP as displayed for the rest of the rows
+                            }
+
+                            // Add the email, status, timestamp, and count
+                            row += '<td class="px-4 py-2 border">' + email + '</td>';
+                            row += '<td class="px-4 py-2 border">' + details.status + '</td>';
+                            row += '<td class="px-4 py-2 border">' + details.timestamp + '</td>';
+                            row += '<td class="px-4 py-2 border" id="counts-items">' + details.count + '</td>';
+                            row += '<td class="px-4 py-2 border">' + details.type + '</td>';
+                            row += '<td class="px-4 py-2 border"> <button id="del" class="focus:outline-none text-white bg-yellow-400 hover:bg-yellow-500 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:focus:ring-yellow-900" value="submit">stop</button> <button id="on" class="focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800" value="submit">stat</button><input type="hidden" value='+ip+'></td>';
+                            row += '</tr>';
+
+                            // Append the row to the table body
+                            tableBody.append(row);
+                            document.querySelector("#detailstxt span").textContent=xy+details.count
+                        });
+                    });
+                });
+            });
+        },
+        error: function(error) {
+            console.error("Error fetching data:", error);
+        }
+    });
+});
+
+
+
+const checkButtonExists = setInterval(() => {
+  const buttonOn = document.querySelector('button#on');
+  const buttonDel = document.querySelector('button#del');
+
+  // Check if both buttons exist
+  if (buttonOn && buttonDel) {
+    // Handle button#on click event
+    if (!buttonOn.onclick) {
+      buttonOn.onclick = function(event) {
+        event.preventDefault();
+        const queryParam = buttonOn.parentElement.querySelector("input").value.trim() === '' ? 'all' : buttonOn.parentElement.querySelector("input").value;
+
+        // Change the button color to red when clicked
+        buttonOn.style.color = "red";
+
+        // AJAX POST request for button#on
+        $.ajax({
+          url: '/sendingoriginal',  // Custom route for the 'on' button
+          type: 'POST',
+          contentType: 'application/json',
+          data: JSON.stringify({
+            query: queryParam,
+          }),
+          success: function(response) {
+            alert('Success for server address: ' + response.message);
+            buttonOn.style.color = "";
+          },
+          error: function(xhr, status, error) {
+            alert('Error  : ' + status + ' - ' + error);
+            buttonOn.style.color = "";
+          }
+        });
+      };
+    }
+
+    // Handle button#del click event
+    if (!buttonDel.onclick) {
+      buttonDel.onclick = function(event) {
+        event.preventDefault();
+        const queryParam = buttonDel.parentElement.querySelector("input").value.trim() === '' ? 'all' : buttonDel.parentElement.querySelector("input").value;
+
+        // Change the button color to red when clicked
+        buttonDel.style.color = "red";
+
+        // Specific AJAX POST request for button#del
+        $.ajax({
+          url: '/mulitplestop',  // Custom route for the 'del' button
+          type: 'POST',
+          contentType: 'application/json',
+          data: JSON.stringify({
+            query: queryParam,
+          }),
+          success: function(response) {
+            alert('Success for server : ' + response.message);
+            buttonDel.style.color  = ""; // Reset color on success
+          },
+          error: function(xhr, status, error) {
+            buttonDel.style.color  = ""; // Reset color on error
+            alert('Error : ' + status + ' - ' + error); // Display the error details
+          }
+        });
+      };
+    }
+
+    // Clear the interval once both buttons are found
+    clearInterval(checkButtonExists);
+  }
+}, 3000); // Check every 3 seconds
+// Check every second
+
+  </script>
+</body>
+</html>

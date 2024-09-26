@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>App Dhasbaord</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="flex items-center justify-center min-h-screen bg-gray-100">
+    <div class="container mx-auto p-4">
+        <table class="min-w-full bg-white rounded-lg overflow-hidden shadow-lg">
+            <thead class="bg-gray-800 text-white">
+                <h1 class="my-2 px-2 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 text-center">Task Board </h1>
+                
+                <tr>
+                    <th class="py-2 px-4 text-left border-r-2 border-white">Task</th>
+                    <th class="py-2 px-4 text-left border-r-2 border-white">Action</th>
+                    <th class="py-2 px-4 text-left ">Link</th>
+                </tr>
+            </thead>
+            <tbody class="shadow-2xl scale-100">
+                <tr class="border-b lg:flex lg:justify-between   ">
+                    <!-- First row: Start Upload button with file input and updated link -->
+                    <td class="lg:py-2 px-6 sm:px-2 lg:px-6 sm:px-5 ">
+                        <label class="block mb-2  text-green-500 dark:text-white" for="zipFile">Choose a zip file please:</label>
+                        <input type="file" id="zipFile" accept=".zip" class="lg:mb-2 sm:mb-3 mb-6  pointer "><br>
+        
+                        <label for="  mb-2 text-sm font-medium text-green-500 dark:text-white" for="txtFile">Choose a text file please:</label>
+                        <input type="file" id="txtFile" accept=".txt,.csv" class="lg:mb-5 sm:mb-3 mb-6 "><br>
+                    </td>
+                    <td class="lg:py-5 px-6 sm:px-2 lg:px-6 sm:px-5">
+                        <button id="uploadBtn" class="bg-green-500 text-white px-4 py-2 rounded">Start Upload(main)</button>
+                    </td>
+                    <td class="lg:py-5 px-6 sm:px-2 lg:px-6 sm:px-5 text-end">
+                        <a href="/dash" class="text-green-500 underline ">View Dashboard</a>
+                    </td>
+                </tr>
+        
+                <tr class="border-b lg:flex lg:justify-between">
+                    <!-- Second row: Stop All Servers button -->
+                    
+                    <td class="lg:py-5 px-6 sm:px-2 lg:px-6 sm:px-5 lg:flex lg:justify-between">
+                        <button class="bg-green-500 text-white px-4 py-2 rounded bg-green-500" id="uploads">Upload All / Upload By IP (server-smtp)</button>
+                        <input type="text" placeholder="type ip here" name="startip" id="startip" class="bg-white border-2 px-4     mx-3 rounded-lg block ">
+                        <button class="bg-green-500 text-white px-4 py-2 rounded bg-green-500" id="upload-api">Upload All / Upload By IP (server-api)</button>
+                        <td class="lg:py-5 px-6 sm:px-2 lg:px-6 sm:px-5">
+                            <button id="resetAllBtn" class="bg-green-500 text-white px-4 py-2 rounded">Reset All (Main)</button>
+                        </td>
+                    </td>
+                    
+                </tr>
+        
+                <tr class="border-b lg:flex lg:justify-between">
+                    <!-- Third row: Stop By IP button and input -->
+                   
+                   
+                    <td class="lg:py-5 px-6 sm:px-2 lg:px-6 sm:px-5 lg:flex lg:justify-between">
+                        <button class="bg-green-500 text-white px-4 py-2 rounded bg-green-500" id="stopserverip">Reset All / Reset By IP(server)</button>
+                        <input type="text" placeholder="type ip here" name="stopserverinput" id="stopserverinput" class=" bg-white border-2 px-4    mx-3 rounded-lg block ">
+                    </td>
+                    
+                    
+                   
+                 
+                    
+                </tr>
+                
+               
+        
+                
+        
+               
+            </tbody>
+        </table>
+        
+        
+        <div class="container p-4 max-w-full space-y-3 p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+            <div class="bg-white p-6 rounded-lg shadow-md space-x-4 flex justify-between">
+                <a href="/vewidata-items" class="p-2 text-red-600 hover:underline" id="datalink">View Data smtp</a>
+                <input type="text"   class="p-2  bg-red-50  border py-0 my-0 text-center text-green-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-green-500 focus:border-green-500   dark:bg-gray-700 dark:border-green-500" id='viewinput' placeholder="Input Ip">
+                <a id="tracelink" href="/vivew-credentials" class="p-2 text-red-600 hover:underline">View data api</a>
+                <a id="tracelinks" href="/listfiles" class="p-2 text-red-600 hover:underline">view all uploaded</a>
+                <a id="tracelinks" href="/download_zip" class="p-2 text-red-600 hover:underline">Download all uploaded</a>
+                <a id="tracelinks" href="/allfiles" class="p-2 text-red-600 hover:underline">view all for upload</a>
+                <a id="tracelinks" href="/download_all" class="p-2 text-red-600 hover:underline">download all for upload</a>
+            </div>
+            <h1 class="text-2xl font-bold mb-4 bg-green-500 text-center rounded py-2">Send Emails</h1>
+            
+                
+                
+                <div class="form-group">
+                    <label for="conversion_type" class="block text-sm font-medium text-gray-700 mb-1">Select Conversion Type:</label>
+                    <select name="conversion_type" id="id_conversion_type" class="w-full border border-gray-300 rounded-md p-2">
+                        <option value="html">HTML only</option>
+                        <option value="html_pdf">HTML + PDF</option>
+                        <option value="html_png">HTML + PNG</option>
+                        <option value="html_jpg">HTML + JPG</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="sending_method" class="block text-sm font-medium text-gray-700 mb-1">Select Sending Method:</label>
+                    <select name="sending_method" id="id_sending_method" class="w-full border border-gray-300 rounded-md p-2">
+                        <option value="smtp">SMTP</option>
+                        <option value="google_api">Google API</option>
+                    </select>
+                </div>
+        
+                <div class="space-y-4">
+                    <button type="button" class="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-blue-600" id="send-email-btn">Set Sending Configuration /By Ip</button>
+                    <input type="text" placeholder="type ip here" name="sendip" id="sendip" class="bg-dark lg:mx-3 sm:mx-3 border-2 px-2 rounded-1">
+                    <button type="button" class="bg-green-500 text-white px-4 mx-5 py-2 rounded-md hover:bg-blue-600" id="sending-email-btn">Start Sending Emails /By Ip</button>
+                    <button type="button" class="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-blue-600" id="stop-email-btn">Stop Sending Emails /By Ip</button>
+                </div>
+
+        </div>
+       
+        
+    </div>
+</body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+$(document).ready(function() {
+        $('#resetAllBtn').click(function(event) {
+            event.preventDefault();
+            $.ajax({
+                url: '/reset-all',  // The URL to send the request to (Flask route)
+                type: 'POST',       // Type of request
+                success: function(response) {
+                    alert(response.message);  // Alert the result of the request
+                },
+                error: function(xhr, status, error) {
+                    alert('Error: ' + error);  // Handle any errors
+                }
+            });
+        });
+    });
+    $(document).ready(function () {
+            // Handle the click event of the upload button
+            $('#uploadBtn').click(function (event) {
+                event.preventDefault();
+                // Create a FormData object to store the files
+                var formData = new FormData();
+
+                // Get the selected files
+                var zipFile = $('#zipFile')[0].files[0];
+                var txtFile = $('#txtFile')[0].files[0];
+
+                // Append the files to the FormData object (if they are not empty)
+                if (zipFile) {
+                    formData.append('zip_file', zipFile);
+                }
+                if (txtFile) {
+                    formData.append('txt_file', txtFile);
+                }
+
+                // Perform the AJAX request
+                $.ajax({
+                    url: '/upload',  // Flask endpoint to handle the upload
+                    type: 'POST',
+                    data: formData,
+                    processData: false,  // Prevent jQuery from processing the data
+                    contentType: false,  // Prevent jQuery from setting the content-type
+                    success: function (response) {
+                        alert(response.message);
+                        location.reload()  // Show the response message from the server
+                    },
+                    error: function (xhr, status, error) {
+                        alert('Error: ' + error);  // Show error if the request fails
+                    }
+                });
+            });
+        });
+
+        document.querySelector("input[type='file']").addEventListener("change", function() {
+  if (this.value) {
+    this.setAttribute("data-title", this.value.replace(/^.*[\\\/]/, ''));
+  } else {
+    this.setAttribute("data-title", "No file chosen");
+  }
+});
+
+
+$(document).ready(function() {
+            $('#uploads').click(function(event) {
+                event.preventDefault();
+                // Get the value from the input box
+                var inputValue = $('#startip').val();
+                
+                // Determine if the input is empty
+                var queryParam = inputValue.trim() === '' ? 'all' : inputValue;
+                
+                // Make an AJAX POST request
+                $.ajax({
+                    url: '/uploadall',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({ query: queryParam }),
+                    success: function(response) {
+                        // Handle the success response
+                        alert(response.message);
+                    },
+                    error: function(xhr, status, error) {
+                        // Handle the error response
+                        alert('Error:', status);
+                    }
+                });
+            });
+        });
+
+    $(document).ready(function() {
+    $('#send-email-btn').click(function(event) {
+        // Get the value from the input box
+        event.preventDefault();
+        var inputValue = $('#sendip').val();
+        document.querySelector("#send-email-btn").style.color="red";
+        // Determine if the input is empty and set the queryParam
+        var queryParam = inputValue.trim() === '' ? 'all' : inputValue;
+
+        // Get the values from the dropdowns
+        var conversionType = $('select[name="conversion_type"]').val();
+        var sendingMethod = $('select[name="sending_method"]').val();
+        setTimeout(function() {
+        //alert("started")
+        //location.reload()
+    }, 5000); 
+        // Make an AJAX POST request
+        $.ajax({
+            url: '/sendmultiple',  // The Flask route you're posting to
+            type: 'POST',
+            contentType: 'application/json',  // Setting the content type as JSON
+            data: JSON.stringify({ 
+                query: queryParam, 
+                conversionType: conversionType,  // Correct variable mapping
+                sendingMethod: sendingMethod 
+            }),
+            success: function(response) {
+                // Handle the success response
+                document.querySelector("#send-email-btn").style.color="";
+                alert('Success: ' + response.message);  // Display message on success
+            },
+            error: function(xhr, status, error) {
+                document.querySelector("#send-email-btn").style.color="";
+                    // Handle client-side or other errors
+                    alert('Error: ' + status + ' - ' + error);  // Display the error details
+                }
+            
+        });
+    });
+});
+$(document).ready(function() {
+    $('#stop-email-btn').click(function(event) {
+        event.preventDefault();
+        // Get the value from the input box
+        var inputValue = $('#sendip').val();
+        document.querySelector("#stop-email-btn").style.color="red";
+        // Determine if the input is empty and set the queryParam
+        var queryParam = inputValue.trim() === '' ? 'all' : inputValue;
+
+         
+        // Make an AJAX POST request
+        $.ajax({
+            url: '/mulitplestop',  // The Flask route you're posting to
+            type: 'POST',
+            contentType: 'application/json',  // Setting the content type as JSON
+            data: JSON.stringify({ 
+                query: queryParam, 
+                
+            }),
+            success: function(response) {
+                // Handle the success response
+                alert('Success: ' + response.message); 
+                document.querySelector("#stop-email-btn").style.color=""; // Display message on success
+            },
+            error: function(xhr, status, error) {
+                document.querySelector("#stop-email-btn").style.color="";
+                    // Handle client-side or other errors
+                    alert('Error: ' + status + ' - ' + error);  // Display the error details
+                }
+            
+        });
+    });
+});
+$(document).ready(function() {
+    $('#stopserverip').click(function(event) {
+        event.preventDefault();
+        // Get the value from the input box
+        var inputValue = $('#stopserverinput').val();
+        document.querySelector("#stopserverip").style.color="red";
+        // Determine if the input is empty and set the queryParam
+        var queryParam = inputValue.trim() === '' ? 'all' : inputValue;
+
+         
+        // Make an AJAX POST request
+        $.ajax({
+            url: '/resetserver',  // The Flask route you're posting to
+            type: 'POST',
+            contentType: 'application/json',  // Setting the content type as JSON
+            data: JSON.stringify({ 
+                query: queryParam, 
+                
+            }),
+            success: function(response) {
+                // Handle the success response
+                alert('Success: ' + response.status); 
+                document.querySelector("#stopserverip").style.color=""; // Display message on success
+            },
+            error: function(xhr, status, error) {
+                document.querySelector("#sstopserverip").style.color="";
+                    // Handle client-side or other errors
+                    alert('Error: ' + status + ' - ' + error);  // Display the error details
+                }
+            
+        });
+    });
+});
+$(document).ready(function() {
+    $('#sending-email-btn').click(function(event) {
+        event.preventDefault();
+        // Get the value from the input box
+        var inputValue = $('#sendip').val();
+        document.querySelector("#sending-email-btn").style.color="red";
+        // Determine if the input is empty and set the queryParam
+        var queryParam = inputValue.trim() === '' ? 'all' : inputValue;
+
+         
+        // Make an AJAX POST request
+        $.ajax({
+            url: '/sendingoriginal',  // The Flask route you're posting to
+            type: 'POST',
+            contentType: 'application/json',  // Setting the content type as JSON
+            data: JSON.stringify({ 
+                query: queryParam, 
+                
+            }),
+            success: function(response) {
+                // Handle the success response
+                alert('Success: ' + response.message); 
+                document.querySelector("#sending-email-btn").style.color=""; // Display message on success
+            },
+            error: function(xhr, status, error) {
+                document.querySelector("#sending-email-btn").style.color="";
+                    // Handle client-side or other errors
+                    alert('Error: ' + status + ' - ' + error);  // Display the error details
+                }
+            
+        });
+    });
+});
+document.getElementById('datalink').addEventListener('click', function (event) {
+            event.preventDefault();
+            const inputValue = document.getElementById('viewinput').value;
+            if (inputValue) {
+                window.location.href = `/vewidata-items?ip=${encodeURIComponent(inputValue)}`;
+            } else {
+                alert('Please enter an IP.');
+            }
+        });
+
+        document.getElementById('tracelink').addEventListener('click', function (event) {
+            event.preventDefault();
+            const inputValue = document.getElementById('viewinput').value;
+            if (inputValue) {
+                window.location.href = `/vivew-credentials?ip=${encodeURIComponent(inputValue)}`;
+            } else {
+                alert('Please enter an IP.');
+            }
+        });
+        $(document).ready(function(){
+        $('#sucessbtn').click(function() {
+            ips=$('#successip').val()
+           if (ips.length<1){
+            alert("must input ip address ")
+            return
+           }
+            // Get the form data
+            var formData = {
+                gmail_file: $('#gmail_file').is(':checked') ? 'gmail' : null,
+                contacts_file: $('#contacts_file').is(':checked') ? 'contacts' : null,
+                subjects_file: $('#subjects_file').is(':checked') ? 'subjects' : null,
+                html_file: $('#html_file').is(':checked') ? 'html' : null,
+                ip_address: $('#successip').val()
+            };
+
+            // Send the AJAX request
+            $.ajax({
+                type: 'POST',
+                url: '/uploadone',
+                data: JSON.stringify(formData),
+                contentType: 'application/json',
+                success: function(response) {
+                    alert('Files uploaded successfully! Response: ' + JSON.stringify(response));
+                },
+                error: function(error) {
+                    alert('Error uploading files: ' + JSON.stringify(error));
+                }
+            });
+        });
+    });
+</script>
+</html>
